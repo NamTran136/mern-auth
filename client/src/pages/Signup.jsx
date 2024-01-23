@@ -5,6 +5,7 @@ function Signup() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -13,18 +14,22 @@ function Signup() {
     try {
       setLoading(false);
       setError(false);
+      setSuccessMessage("");
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      
+
       if (data.success === false) {
         setError(true);
         return;
+      } else {
+        setSuccessMessage(
+          "Congratulations, your account has been successfully created."
+        );
       }
-      
     } catch (err) {
       setLoading(false);
       setError(true);
@@ -74,6 +79,7 @@ function Signup() {
         </Link>
       </div>
       <p className="text-red-700 mt">{error && "Something went wrong"}</p>
+      <p className="text-green-700 mt">{successMessage}</p>
     </div>
   );
 }
