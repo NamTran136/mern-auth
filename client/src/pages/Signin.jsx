@@ -6,11 +6,12 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import OAuth from '../components/OAuth'
+import OAuth from "../components/OAuth";
 
 function Signin() {
   const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user) 
+  const { loading, error } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (e) => {
@@ -26,11 +27,11 @@ function Signin() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      dispatch(signInSuccess(data));
       if (data.success === false) {
         dispatch(signInFailure(data));
         return;
       }
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (err) {
       dispatch(signInFailure(err));
@@ -72,7 +73,9 @@ function Signin() {
           <span className="text-blue-500">Sign up</span>
         </Link>
       </div>
-      <p className="text-red-700 mt">{error ? error.message || "Something went wrong": ''} </p>
+      <p className="text-red-700 mt-5">
+        {error ? error.message || "Something went wrong!" : ""}
+      </p>
     </div>
   );
 }
